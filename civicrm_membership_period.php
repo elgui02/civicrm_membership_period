@@ -176,6 +176,15 @@ function civicrm_membership_period_civicrm_post($op, $objectName, $objectId, &$o
             //nothing to do
         }
         break;
+    case 'MembershipPayment':
+        Civi::log()->debug($objectName);
+        Civi::log()->debug($op);
+        foreach($objectRef as $key => $value)
+        {
+    Civi::log()->debug($key);
+    Civi::log()->debug($value);
+        }
+        break;
     default:
         // nothing to do
     }
@@ -227,7 +236,7 @@ function civicrm_membership_period_civicrm_pre($op, $objectName, $objectId, &$ob
                 }
                 break;
             case 'renew':
-                
+
                 $lastPeriod['start_date'] = $objectRef['membership_start_date'];
                 $lastPeriod['end_date'] = $objectRef['membership_end_date'];
 
@@ -238,7 +247,10 @@ function civicrm_membership_period_civicrm_pre($op, $objectName, $objectId, &$ob
                 );
                 try
                 {
-                    $period = civicrm_api3('MembershipPeriod', 'create', $lastPeriod);
+                    if (array_key_exists('membership_start_date', $objectRef))
+                    {
+                        $period = civicrm_api3('MembershipPeriod', 'create', $lastPeriod);
+                    }
                     $nperiod = civicrm_api3('MembershipPeriod', 'create', $newPeriod);
                 }
                 catch (CiviCRM_API3_Exception $e) {

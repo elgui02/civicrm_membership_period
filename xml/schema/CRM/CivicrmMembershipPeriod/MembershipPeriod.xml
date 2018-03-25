@@ -57,5 +57,26 @@
     <add>4.4</add>
     <onDelete>CASCADE</onDelete>
   </foreignKey>
-
+  <field>
+    <name>contribution_id</name>
+    <title>Contribution</title>
+    <type>int unsigned</type>
+    <comment>FK to contribution table.</comment>
+    <add>2.0</add>
+  </field>
+  <foreignKey>
+    <name>contribution_id</name>
+    <table>civicrm_contribution</table>
+    <key>id</key>
+    <add>2.0</add>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <index>
+    <name>UI_membership_period</name>
+    <unique>true</unique>
+    <fieldName>membership_id</fieldName>
+    <fieldName>start_date</fieldName>
+    <fieldName>end_date</fieldName>
+    <add>2.0</add>
+  </index>
 </table>

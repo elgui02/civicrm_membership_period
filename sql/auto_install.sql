@@ -84,12 +84,18 @@ CREATE TABLE `civicrm_membership_period` (
      `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Unique MembershipPeriod ID',
      `start_date` date    COMMENT 'Beginning of current uninterrupted membership period.',
      `end_date` date    COMMENT 'Current membership period expire date.',
-     `membership_id` int unsigned    COMMENT 'FK to Membership' 
+     `membership_id` int unsigned    COMMENT 'FK to Membership',
+     `contribution_id` int unsigned    COMMENT 'FK to contribution table.' 
 ,
         PRIMARY KEY (`id`)
  
- 
-,          CONSTRAINT FK_civicrm_membership_period_membership_id FOREIGN KEY (`membership_id`) REFERENCES `civicrm_membership`(`id`) ON DELETE CASCADE  
+    ,     UNIQUE INDEX `UI_membership_period`(
+        membership_id
+      , start_date
+      , end_date
+  )
+  
+,          CONSTRAINT FK_civicrm_membership_period_membership_id FOREIGN KEY (`membership_id`) REFERENCES `civicrm_membership`(`id`) ON DELETE CASCADE,          CONSTRAINT FK_civicrm_membership_period_contribution_id FOREIGN KEY (`contribution_id`) REFERENCES `civicrm_contribution`(`id`) ON DELETE CASCADE  
 )    ;
 
  
