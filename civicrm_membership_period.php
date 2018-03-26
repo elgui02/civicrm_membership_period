@@ -220,8 +220,10 @@ function civicrm_membership_period_civicrm_pre($op, $objectName, $objectId, &$ob
             {
                 unset($lastPeriod['id']);
             }
+           
+            $action = CRM_Utils_Array::value('action', $_GET);
 
-            switch($_GET['action'])
+            switch($action)
             {
             case 'update':
                 $lastPeriod['start_date'] = $objectRef['start_date'];
@@ -266,8 +268,67 @@ function civicrm_membership_period_civicrm_pre($op, $objectName, $objectId, &$ob
     }
 }
 
+function civicrm_membership_period_civicrm_links($op, $objectName, $objectId, &$links, &$mask, &$values)
+{
+    $myLinks = array();
+    switch($objectName)
+    {
+    case 'Membership':
+        switch($op)
+        {
+        case 'membership.tab.row':
+            $values['id'] = $objectId;
+            $links[] = array(
+                'name' => ts('Membership periods'),
+                'title' => ts('Send Invoice'),
+                'url' => 'civicrm/mebership-period',
+                'qs' => 'reset=1&id=%%id%%',
+            );
+            break;
+        }
+        break;
+    }
 
+    return $myLinks;
+ /* switch ($objectName) {
+    case 'Contact':
+      switch ($op) {
+        case 'view.contact.activity':
+          // Adds a link to the main tab.
+          $links[] = array(
+            'name' => ts('My Module Actions'),
+            'url' => 'mymodule/civicrm/actions/%%myObjId%%',
+            'title' => 'New Thing',
+            'class' => 'no-popup',
+          );
+          $values['myObjId'] = $objectId;
+          break;
 
+        case 'contact.selector.row':
+          // Add a similar thing when a contact appears in a row
+          $links[] = array(
+            'name' => ts('My Module'),
+            'url' => 'mymodule/civicrm/actions/%%myObjId%%',
+            'title' => 'New Thing',
+            'qs' => 'reset=1&tid=%%thingId%%',
+            'class' => 'no-popup',
+          );
+          $values['myObjId'] = $objectId;
+          $values['thingId'] = 'mything';
+          break;
+
+        case 'create.new.shorcuts':
+          // add link to create new profile
+          $links[] = array(
+            'url' => '/civicrm/admin/uf/group?action=add&reset=1',
+            'name' => ts('New Profile'),
+             // old extensions using 'title' will still work
+          );
+          break;
+      }
+  }
+  return $myLinks;*/
+}
 /**
  * Implements hook_civicrm_preProcess().
  *
