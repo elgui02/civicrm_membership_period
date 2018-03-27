@@ -149,41 +149,24 @@ function civicrm_membership_period_civicrm_post($op, $objectName, $objectId, &$o
         switch( $op )
         {
         case 'create':
-            try
-            {
-                $perdiod = civicrm_api3('MembershipPeriod', 'create', array(
+            $period = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::create(array(
                     'membership_id' => $objectId,
                     'start_date' => $objectRef->start_date,
                     'end_date' => $objectRef->end_date
                 ));
-            }
-            catch (CiviCRM_API3_Exception $e) {
-                $error = $e->getMessage();
-            }
-            break;
-        case 'delete':
-            try
-            {
-                $perdiod = civicrm_api3('MembershipPeriod', 'delete', array(
-                    'membership_id' => $objectId
-                ));
-            }
-            catch (CiviCRM_API3_Exception $e) {
-                $error = $e->getMessage();
-            }
             break;
         default:
             //nothing to do
         }
         break;
     case 'MembershipPayment':
-        Civi::log()->debug($objectName);
-        Civi::log()->debug($op);
-        foreach($objectRef as $key => $value)
-        {
-    Civi::log()->debug($key);
-    Civi::log()->debug($value);
-        }
+    Civi::log()->debug($objectName);
+    Civi::log()->debug($op);
+    foreach($objectRef as $key => $value)
+    {
+      Civi::log()->debug($key);
+      Civi::log()->debug($value);
+    }
         break;
     default:
         // nothing to do
@@ -202,64 +185,37 @@ function civicrm_membership_period_civicrm_pre($op, $objectName, $objectId, &$ob
         switch( $op )
         {
         case 'edit':
-            //get period history for update if doesn't exists that will be created
-            try {
-                $periods = civicrm_api3('MembershipPeriod', 'get', array(
-                    'membership_id' => $objectId
-                ));
-            }
-            catch (CiviCRM_API3_Exception $e) {
-                $error = $e->getMessage();
-            }
+            $params = array(
+              'membership_id' => $objectId,
+            );
 
-            //create a period with update dates
-            $lastPeriod = end($periods['values']);
-            $lastPeriod['membership_id'] = $objectId;
-            
-            if( $periods['count'] == 0 )
-            {
-                unset($lastPeriod['id']);
-            }
-           
             $action = CRM_Utils_Array::value('action', $_GET);
 
             switch($action)
             {
             case 'update':
-                $lastPeriod['start_date'] = $objectRef['start_date'];
-                $lastPeriod['end_date'] = $objectRef['end_date'];
-                
-                try
-                {
-                    $period = civicrm_api3('MembershipPeriod', 'create', $lastPeriod);
-                }
-                catch (CiviCRM_API3_Exception $e) {
-                    $error = $e->getMessage();
-                }
+
+                $params['start_date'] = $objectRef['start_date'];
+                $params['end_date'] = $objectRef['end_date'];
+
+                $period = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::UpdateLastMembershipPeriod($objectId,$params);
+
                 break;
             case 'renew':
 
-                $lastPeriod['start_date'] = $objectRef['membership_start_date'];
-                $lastPeriod['end_date'] = $objectRef['membership_end_date'];
+            //params to update the last period before renewal
+            $params['start_date'] = $objectRef['membership_start_date'];
+            $params['end_date'] = $objectRef['membership_end_date'];
 
-                $newPeriod = array(
-                    'membership_id' => $objectId,
-                    'start_date' => $objectRef['start_date'],
-                    'end_date'   => $objectRef['end_date']
-                );
-                try
-                {
-                    if (array_key_exists('membership_start_date', $objectRef))
-                    {
-                        $period = civicrm_api3('MembershipPeriod', 'create', $lastPeriod);
-                    }
-                    $nperiod = civicrm_api3('MembershipPeriod', 'create', $newPeriod);
-                }
-                catch (CiviCRM_API3_Exception $e) {
-                    $error = $e->getMessage();
-                }
+            if (array_key_exists('membership_start_date', $objectRef))
+              $lastPeriod = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::UpdateLastMembershipPeriod($objectId, $params);
 
-                break;
+            $params['start_date'] = $objectRef['start_date'];
+            $params['end_date'] = $objectRef['end_date'];
+
+            $period = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::create($params);
+
+            break;
             }
         }
         break;
