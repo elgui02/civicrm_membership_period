@@ -62,4 +62,54 @@ class CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod extends CRM_CivicrmMember
     return $instance;
   }
 
+  /**
+  * Obtein membership
+  *
+  * @param id $id membership id
+  * @return CRM_Membership_DAO_Membership
+  */
+  public static function getMembership($id)
+  {
+    $membership = array();
+    if ($id) {
+      $membershipObj = new CRM_Member_DAO_Membership();
+      $membershipObj->id = $id;
+      $membershipObj->find();
+      while ($membershipObj->fetch()) {
+        $membership['membership_id'] = $membershipObj->id;
+        $membership['start_date'] = $membershipObj->start_date;
+        $membership['end_date'] = $membershipObj->end_date;
+      }
+    }
+    return $membership;
+  }
+
+  /**
+  * Obtein membership period history
+  *
+  * @param id $id membership id
+  * @return CRM_Membership_DAO_Membership
+  */
+  public static function getMembershipPeriodHistory($id)
+  {
+    try {
+        $periods = civicrm_api3('MembershipPeriod', 'get', array(
+          'membership_id' => $id,
+          'return' => array(
+            'id',
+            'membership_id',
+            'start_date',
+            'end_date',
+            'contribution_id.total_amount',
+            'contribution_id.contact_id',
+            'contribution_id'
+          ),
+        ));
+    }
+    catch (CiviCRM_API3_Exception $e) {
+        $error = $e->getMessage();
+    }
+
+    return $periods['values'];
+  }
 }

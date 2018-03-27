@@ -143,6 +143,7 @@ class CRM_CivicrmMembershipPeriod_DAO_MembershipPeriod extends CRM_Core_DAO {
           'entity' => 'MembershipPeriod',
           'bao' => 'CRM_CivicrmMembershipPeriod_DAO_MembershipPeriod',
           'localizable' => 0,
+          'FKClassName' => 'CRM_Member_DAO_Membership',
         ],
         'contribution_id' => [
           'name' => 'contribution_id',
@@ -153,6 +154,7 @@ class CRM_CivicrmMembershipPeriod_DAO_MembershipPeriod extends CRM_Core_DAO {
           'entity' => 'MembershipPeriod',
           'bao' => 'CRM_CivicrmMembershipPeriod_DAO_MembershipPeriod',
           'localizable' => 0,
+          'FKClassName' => 'CRM_Contribute_DAO_Contribution',
         ],
       ];
       CRM_Core_DAO_AllCoreTables::invoke(__CLASS__, 'fields_callback', Civi::$statics[__CLASS__]['fields']);

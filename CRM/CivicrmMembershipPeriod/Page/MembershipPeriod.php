@@ -8,20 +8,14 @@ class CRM_CivicrmMembershipPeriod_Page_MembershipPeriod extends CRM_Core_Page {
     CRM_Utils_System::setTitle(E::ts('Membership period history'));
     $id = CRM_Utils_Array::value('id', $_GET);
 
-    try {
-        $periods = civicrm_api3('MembershipPeriod', 'get', array(
-            'membership_id' => $id
-        ));
-    }
-    catch (CiviCRM_API3_Exception $e) {
-        $error = $e->getMessage();
-    }
+    $periods = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::getMembershipPeriodHistory($id);
+    
     //
     // Example: Assign a variable for use in a template
-    $this->assign('currentTime', $periods['count']);
+    $this->assign('currentTime', count($periods));
 
 
-    $this->assign( 'periods', $periods['values'] );
+    $this->assign( 'periods', $periods );
 
     parent::run();
   }

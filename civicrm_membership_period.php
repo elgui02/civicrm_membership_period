@@ -160,13 +160,10 @@ function civicrm_membership_period_civicrm_post($op, $objectName, $objectId, &$o
         }
         break;
     case 'MembershipPayment':
-    Civi::log()->debug($objectName);
-    Civi::log()->debug($op);
-    foreach($objectRef as $key => $value)
-    {
-      Civi::log()->debug($key);
-      Civi::log()->debug($value);
-    }
+          $membership = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::getMembership($objectRef->membership_id);
+          $membership['contribution_id'] = $objectRef->contribution_id;
+
+          $period = CRM_CivicrmMembershipPeriod_BAO_MembershipPeriod::UpdateLastMembershipPeriod($objectRef->membership_id, $membership);
         break;
     default:
         // nothing to do
@@ -246,44 +243,6 @@ function civicrm_membership_period_civicrm_links($op, $objectName, $objectId, &$
     }
 
     return $myLinks;
- /* switch ($objectName) {
-    case 'Contact':
-      switch ($op) {
-        case 'view.contact.activity':
-          // Adds a link to the main tab.
-          $links[] = array(
-            'name' => ts('My Module Actions'),
-            'url' => 'mymodule/civicrm/actions/%%myObjId%%',
-            'title' => 'New Thing',
-            'class' => 'no-popup',
-          );
-          $values['myObjId'] = $objectId;
-          break;
-
-        case 'contact.selector.row':
-          // Add a similar thing when a contact appears in a row
-          $links[] = array(
-            'name' => ts('My Module'),
-            'url' => 'mymodule/civicrm/actions/%%myObjId%%',
-            'title' => 'New Thing',
-            'qs' => 'reset=1&tid=%%thingId%%',
-            'class' => 'no-popup',
-          );
-          $values['myObjId'] = $objectId;
-          $values['thingId'] = 'mything';
-          break;
-
-        case 'create.new.shorcuts':
-          // add link to create new profile
-          $links[] = array(
-            'url' => '/civicrm/admin/uf/group?action=add&reset=1',
-            'name' => ts('New Profile'),
-             // old extensions using 'title' will still work
-          );
-          break;
-      }
-  }
-  return $myLinks;*/
 }
 /**
  * Implements hook_civicrm_preProcess().
