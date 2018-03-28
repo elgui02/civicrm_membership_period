@@ -15,10 +15,11 @@
     {elseif $key == 'end_date'}
       <td class="crm-membership-end_date" data-order="{$item}">{$item}</td>
     {elseif $key == 'contribution_id.total_amount'}
-      <td class="contriTotalLeft right">{$item|crmMoney}</td>
+      <td class="contriTotalLeft right">
+        <a href="/civicrm/contact/view/contribution?reset=1&id={$period.contribution_id}&action=view">{$item|crmMoney}</a>
+      </td>
     {/if}
   {/foreach}
-  <td><a href="/civicrm/contact/view/contribution?reset=1&id={$period.contribution_id}&action=view">{ts}view{/ts}</td>
 </tr>
 {/foreach}
 </table>
