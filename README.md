@@ -2,14 +2,14 @@
 
 ![Screenshot](/images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+Mebership period it's a CiviCRM extension for membership to have a history of renewal periods
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v5.4+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM 4.7
 
 ## Installation (Web UI)
 
@@ -22,7 +22,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 cd <extension-dir>
-cv dl civicrm-membership-period@https://github.com/FIXME/civicrm-membership-period/archive/master.zip
+cv dl civicrm_membership_period@https://github.com/FIXME/civicrm_membership_period/archive/master.zip
 ```
 
 ## Installation (CLI, Git)
@@ -31,14 +31,15 @@ Sysadmins and developers may clone the [Git](https://en.wikipedia.org/wiki/Git) 
 install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
-git clone https://github.com/FIXME/civicrm-membership-period.git
+git clone https://github.com/elgui02/civicrm_membership_period.git
 cv en civicrm_membership_period
 ```
 
 ## Usage
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
+The record start when a membership is renewal, updated or make a membership renewal payment,
+when user want to see the mebership period history can be accessed on membership list menu look image1
+and show a popup with a membership history.
 
-## Known Issues
-
-(* FIXME *)
+## image1
+![Screenshot](/images/image01.png)
